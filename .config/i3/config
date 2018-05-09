@@ -1,0 +1,272 @@
+# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+
+set $mod Mod4
+
+font pango:System San Francisco Display 11
+#font pango:monospace 8
+#font pango:DejaVu Sans Mono 10
+#font pango:DejaVu Sans Mono, Icons 11
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# media controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+bindsym XF86AudioPlay exec playerctl play
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# Touchpad controls
+#bindsym XF86TouchpadToggle exec ~/.config/i3/touchpad-toggle.sh # toggle touchpad
+
+# start a terminal
+#bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec terminator
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# start ROFI
+#bindsym $mod+d exec rofi -show run #-lines 5 -ch 2 -width 100 -padding 800 -opacity "85" -bw 0 -bc #2f343f -bg #2f343f -fg "$text-color" -hlbg "$bg-color" -hlfg "#9575cd" -font "Sytem San Francisco Display 18"
+
+# start dmenu (a program launcher)
+bindsym $mod+d exec dmenu_run
+
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+# change focus
+#bindsym $mod+j focus left
+#bindsym $mod+k focus down
+#bindsym $mod+l focus up
+#bindsym $mod+semicolon focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+semicolon move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# workspace variables
+set $workspace1 "1 "
+set $workspace2 "2 "
+set $workspace3 "3 "
+set $workspace4 "4 "
+set $workspace8 "8 ♪"
+set $workspace10 "10 "
+
+# switch to workspace
+bindsym $mod+1 workspace $workspace1
+bindsym $mod+2 workspace $workspace2
+bindsym $mod+3 workspace $workspace3
+bindsym $mod+4 workspace $workspace4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace $workspace8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace $workspace10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $workspace1
+bindsym $mod+Shift+2 move container to workspace $workspace2
+bindsym $mod+Shift+3 move container to workspace $workspace3
+bindsym $mod+Shift+4 move container to workspace $workspace4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace $workspace8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace $workspace10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# programs mode
+mode "programs" {
+  bindsym g exec gimp; mode "default"
+  bindsym c exec chromium; mode "default"
+  bindsym a exec audacity; mode "default"
+  bindsym d exec dolphin; mode "default"
+  bindsym v exec virtualbox; mode "default"
+  #bindsym r exec rhythmbox; mode "default"
+  bindsym l exec xcalc; mode "default"
+  bindsym m exec audacious; mode "default"
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+p mode "programs"
+
+# system mode
+set $ExecLocker i3lock --ignore-empty-password --show-failed-attempts -c "#070a0f" && sleep 1
+set $ModeSystem (l) lock, (s) suspend, (u) shutdown, (r) reset
+mode "$ModeSystem" {
+  bindsym l exec --no-startup-id $ExecLocker; mode "default"
+  bindsym s exec --no-startup-id $ExecLocker && systemctl suspend; mode "default"
+  bindsym u exec systemctl poweroff
+  bindsym r exec systemctl reboot
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+Pause mode "$ModeSystem"
+
+
+# brightness mode
+mode "brightness" {
+  bindsym 1 exec xbacklight -set 5; mode "default"
+  bindsym 5 exec xbacklight -set 50; mode "default"
+  bindsym 0 exec xbacklight -set 100; mode "default"
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+b mode "brightness"
+
+# monitor output presets
+mode "Monitor: (h)hdmi, (l)lcd" {
+  bindsym l exec ~/.config/i3/monitor-lcd.sh; mode "default"
+  bindsym h exec ~/.config/i3/monitor-hdmi.sh; mode "default"
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+m mode "Monitor: (h)hdmi, (l)lcd"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+  # These bindings trigger as soon as you enter the resize mode
+
+  # Pressing left will shrink the window’s width.
+  # Pressing right will grow the window’s width.
+  # Pressing up will shrink the window’s height.
+  # Pressing down will grow the window’s height.
+  bindsym j resize shrink width 10 px or 10 ppt
+  bindsym k resize grow height 10 px or 10 ppt
+  bindsym l resize shrink height 10 px or 10 ppt
+  bindsym semicolon resize grow width 10 px or 10 ppt
+
+  # same bindings, but for the arrow keys
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym Down resize grow height 10 px or 10 ppt
+  bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym Right resize grow width 10 px or 10 ppt
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# original theme
+#set $bg-color #2f343f
+#set $inactive-bg-color #0f141f
+#set $text-color #f3f4f5
+#set $inactive-text-color #676e70
+#set $urgent-bg-color #e53935
+
+#set $lock-color #0f141f
+set $bg-color #006600
+set $inactive-bg-color #142414
+set $text-color #f3f4f5
+set $inactive-text-color #676e70
+set $urgent-bg-color #3539e5
+set $status-color #2f343f
+
+# win colors            border             background         text
+client.focused          $bg-color          $bg-color          $text-color
+client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color
+client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color
+client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color
+
+hide_edge_borders both
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+
+bar {
+  colors {
+    background  $status-color
+    separator   #000000
+
+    # class            border             background         text
+    focused_workspace  $bg-color          $bg-color          $text-color
+    inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+    urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+  }
+
+  #font pango:System San Francisco Display 15
+  status_command	i3blocks
+  position top
+  #tray_padding 20
+}
+
+for_window [class="Pavucontrol"] floating enable
+for_window [class="XCalc"] floating enable
+#for_window [class="Atom"] focus child, layout stacking, focus
+for_window [class="Atom"] focus child, layout stacking, focus
+for_window [class="VirtualBox Manager"] focus child, layout stacking, focus
+
+# defined by 'xprop' WM_CLASS(STRING) second argument
+assign [class="Chromium"] $workspace1
+assign [class="Atom"] $workspace3
+assign [class="dolphin"] $workspace4
+assign [class="Audacity"] $workspace8
+#assign [class="Rhythmbox"] $workspace8
+assign [class="Audacious"] $workspace8
+assign [class="VirtualBox Manager"] $workspace10
+
+#exec chromium
+#exec_always xrandr --output HDMI1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output LVDS1 --off --output VIRTUAL1 --off --output DP1 --off --output VGA1 --off
+exec_always feh --bg-scale ~/pix/wallpapers/best-hd-wallpapers-8324-8657-hd-wallpapers.jpg
+exec_always synclient TapButton1=1
+exec_always --no-startup-id xfce4-panel --disable-wm-check

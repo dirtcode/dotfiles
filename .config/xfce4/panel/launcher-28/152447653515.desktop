@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Tor Browser
+Comment=
+Exec=/home/xarathi/Downloads/tor-browser_en-US/start-tor-browser.desktop
+Icon=tor-browser
+Path=/home/xarathi/Downloads
+Terminal=false
+StartupNotify=true
